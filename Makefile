@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright The Kubernetes Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,10 +43,14 @@ lint:
 update:
 	go mod tidy
 
+.PHONY: ensure-buildx
+ensure-buildx:
+	./hack/init-buildx.sh
+
 # get image name from directory we're building
 IMAGE_NAME=dranet
 # docker image registry, default to upstream
-REGISTRY?=ghcr.io/google
+REGISTRY?=gcr.io/k8s-staging-networking
 # tag based on date-sha
 TAG?=$(shell echo "$$(date +v%Y%m%d)-$$(git describe --always --dirty)")
 # the full image tag
@@ -55,25 +59,24 @@ PLATFORMS?=linux/amd64,linux/arm64
 
 # required to enable buildx
 export DOCKER_CLI_EXPERIMENTAL=enabled
-image:
-# docker buildx build --platform=${PLATFORMS} $(OUTPUT) --progress=$(PROGRESS) -t ${IMAGE} --pull $(EXTRA_BUILD_OPT) .
-	docker build . -t ${IMAGE} --load
-
-image-build:
+image-build: ensure-buildx
 	docker buildx build . \
-		--platform="${PLATFORMS}" \
-		--tag="${IMAGE}"
+		--tag="${IMAGE}" \
+		--load
 
-push-image: image
-	docker tag ${IMAGE} ghcr.io/google/dranet:stable
-	docker push ${IMAGE}
-	docker push ghcr.io/google/dranet:stable
+image-push: ensure-buildx
+	docker buildx build . \
+		--tag="${IMAGE}" \
+		--push
 
 kind-cluster:
 	kind create cluster --name dra --config kind.yaml
 
 kind-image: image
-	docker tag ${IMAGE} ghcr.io/google/dranet:stable
-	kind load docker-image ghcr.io/google/dranet:stable --name dra
+	docker tag ${IMAGE} registry.k8s.io/networking/dranet:stable
+	kind load docker-image registry.k8s.io/networking/dranet:stable --name dra
 	kubectl delete -f install.yaml || true
 	kubectl apply -f install.yaml
+
+# The main release target, which pushes all images
+release: push-image

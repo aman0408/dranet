@@ -146,7 +146,7 @@ spec:
           - name: worker-rdma-nic
             resourceClaimTemplateName: mpi-worker-rdma-nic-template
           containers:
-          - image: ghcr.io/google/dranet-rdma-perftest:sha-fb3f932
+          - image: registry.k8s.io/networking/dranet-rdma-perftest:sha-fb3f932
             name: mpi-worker
             securityContext:
               capabilities:

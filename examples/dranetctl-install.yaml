@@ -113,7 +113,7 @@ spec:
         args:
         - /dranet
         - --v=4
-        image: ghcr.io/google/dranet:stable
+        image: registry.k8s.io/networking/dranet:stable
         resources:
           requests:
             cpu: "100m"

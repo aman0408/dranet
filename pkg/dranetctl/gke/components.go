@@ -1,5 +1,5 @@
 /*
-Copyright 2025 Google LLC
+Copyright The Kubernetes Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -143,7 +143,7 @@ spec:
         args:
         - /dranet
         - --v=4
-        image: ghcr.io/google/dranet:stable
+        image: registry.k8s.io/networking/dranet:stable
         resources:
           requests:
             cpu: "100m"

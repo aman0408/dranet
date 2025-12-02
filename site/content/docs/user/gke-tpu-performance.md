@@ -60,7 +60,7 @@ Once DRANET is running you'll be able to obtain the network resources exposed by
         - /dranet
         - --v=4
         - --filter=attributes["dra.net/virtual"].BoolValue == false
-       image: ghcr.io/google/dranet:stable
+       image: registry.k8s.io/networking/dranet:stable
 ```
 
 First, we tell DRANET what kind of NICs we're interested in and how Pods can claim them. In order to simplify our workloads we can create a `DeviceClass` that matches only the resources exposed by DRANET.

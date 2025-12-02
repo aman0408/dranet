@@ -6,7 +6,7 @@ function setup_suite {
   export BATS_TEST_TIMEOUT=150
   # Define the name of the kind cluster
   export CLUSTER_NAME="dranet-test-cluster"
-  export IMAGE_NAME="ghcr.io/google/dranet"
+  export IMAGE_NAME="registry.k8s.io/networking/dranet"
 
   # Build the image
   docker build -t "$IMAGE_NAME":test -f Dockerfile "$BATS_TEST_DIRNAME"/.. --load

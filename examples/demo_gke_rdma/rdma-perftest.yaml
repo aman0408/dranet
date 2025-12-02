@@ -52,7 +52,7 @@ spec:
         name: rdma-perftest
     spec:
       containers:
-      - image: ghcr.io/google/dranet-rdma-perftest:stable
+      - image: registry.k8s.io/networking/dranet-rdma-perftest:stable
         name: dranet-rdma-perftest
         securityContext:
           capabilities:

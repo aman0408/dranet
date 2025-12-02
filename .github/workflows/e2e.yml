@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright The Kubernetes Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ env:
   GO_VERSION: "1.24"
   K8S_VERSION: "v1.34.0"
   KIND_VERSION: "v0.30.0"
-  IMAGE_NAME: ghcr.io/google/dranet
+  IMAGE_NAME: registry.k8s.io/networking/dranet
   KIND_CLUSTER_NAME: kind
 
 permissions: write-all
@@ -48,9 +48,9 @@ jobs:
 
     - name: Build
       run: |
-        docker build -t ghcr.io/google/dranet:test -f Dockerfile .
+        docker build -t registry.k8s.io/networking/dranet:test -f Dockerfile .
         mkdir _output
-        docker save ghcr.io/google/dranet:test  > _output/dranet-image.tar
+        docker save registry.k8s.io/networking/dranet:test  > _output/dranet-image.tar
 
     - uses: actions/upload-artifact@v5
       with:
@@ -121,8 +121,8 @@ jobs:
       run: |
         # preload dranet image
         docker load --input dranet-image.tar
-        /usr/local/bin/kind load docker-image ghcr.io/google/dranet:test --name ${{ env.KIND_CLUSTER_NAME}}
-        sed -i s#ghcr.io/google/dranet.*#ghcr.io/google/dranet:test# install.yaml
+        /usr/local/bin/kind load docker-image registry.k8s.io/networking/dranet:test --name ${{ env.KIND_CLUSTER_NAME}}
+        sed -i s#registry.k8s.io/networking/dranet.*#registry.k8s.io/networking/dranet:test# install.yaml
         /usr/local/bin/kubectl apply -f ./install.yaml
 
     - name: Get Cluster status
